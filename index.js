@@ -185,7 +185,7 @@ async function run() {
         const reqesterAccount = await userCollection.findOne({
           email: requester,
         });
-        // if (reqesterAccount.role === "admin") {
+        if (reqesterAccount.role === "admin") {
           const filter = { email: email };
           const updateDoc = {
             $set: {
@@ -194,9 +194,9 @@ async function run() {
           };
           const result = await userCollection.updateOne(filter, updateDoc);
           res.send(result);
-        // } else {
-        //   res.status(403).send({ message: "Forbidden access" });
-        // }
+        } else {
+          res.status(403).send({ message: "Forbidden access" });
+        }
       });
   
       // verify admin to make a user ADMIN
@@ -229,18 +229,18 @@ async function run() {
     PAYMENT 
     */
 
-    // app.post("/create-payment-intent", verifyJWT, async (req, res) => {
-    //     const service = req.body;
-    //     const price = service.price;
-    //     const amount = price * 100;
-    //     const paymentIntent = await stripe.paymentIntents.create({
-    //       amount: amount,
-    //       currency: "usd",
-    //       payment_method_types: ["card"],
-    //     });
-    //     console.log(paymentIntent.client_secret);
-    //     res.send({ clientSecret: paymentIntent.client_secret });
-    //   });
+    app.post("/create-payment-intent", verifyJWT, async (req, res) => {
+        const service = req.body;
+        const price = service.price;
+        const amount = price * 100;
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: "usd",
+          payment_method_types: ["card"],
+        });
+        console.log(paymentIntent.client_secret);
+        res.send({ clientSecret: paymentIntent.client_secret });
+      });
   
       /*MY PROFILE
       
