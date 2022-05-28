@@ -249,13 +249,15 @@ async function run() {
       
       */
       //add or update information
-      app.put("/profile/:email", async (req, res) => {
+    app.put("/profile/:email", async (req, res) => {
         const email = req.params.email;
         const userInfo = req.body;
         const filter = { email: email };
         const options = { upsert: true };
         const updateDoc = {
-          $set: userInfo,
+          $set: {
+            userInfo,
+          },
         };
         const result = await profileCollection.updateOne(
           filter,
@@ -268,12 +270,12 @@ async function run() {
       //get all data from
       app.get("/profile", async (req, res) => {
         const email = req.query.email;
+        console.log(email);
         const filter = { email: email };
-        const result = await profileCollection.findOne({ filter });
-        res.send(result);
+        const result = await profileCollection.findOne(filter);
+        console.log(result);
+        res.send({ result });
       });
-  
-
 
     } finally {
     }
